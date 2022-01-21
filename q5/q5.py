@@ -156,7 +156,7 @@ def usage():
 ## IN
 ##
 ## OUT
-##
+## Dictionary med kommandot som nyckel
 def parse_command_line_args():
     try:
         opts, rest = getopt.getopt(sys.argv[1:], "hc:u", ["help", "check=", "update"])
@@ -199,7 +199,7 @@ def print_schedule(data):
 ## search_data
 ##
 ## IN
-##
+## What - Är vilken vecka som search ska kolla om "check" används i input
 ## OUT
 ##
 def search_data(what, dataset):
