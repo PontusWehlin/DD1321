@@ -34,6 +34,10 @@ class Schemaevent:
             return True
         if x in self.datum:
             return True
+        if x in self.tid:
+            return True
+        if x in self.info:
+            return True
 
 
 ###########################################################################
@@ -52,11 +56,11 @@ def parse_url_file(file_content):
        '.*?td.*?class.*?weekColumn.*?>*(v.*?)<.')
 
     reg_expr_w = re.compile(
-        '.*?td.*?class.*?headline.*?> *([MTOFL][a-zåäö]+) *20[12][0-9]-0?([123]?[0-9])-0?([123]?[0-9])<.*weekin.*> *(v.*?)<.',
+        '.*?td.*?class.*?headline.*?> *([MTOFL][a-ö]+) *20[12][0-9]-0?([123]?[0-9])-0?([123]?[0-9])<.*weekin.*> *(v.*?)<.',
         re.I)
 
     reg_expr_d = re.compile(
-        '.*?td.*?class.*?headline.*?>([MTOFL][a-zåäö]+) *20[12][0-9]-0?([123]?[0-9])-0?([123]?[0-9])<.')
+        '.*?td.*?class.*?headline.*?>([MTOFL][a-ö]+) *20[12][0-9]-0?([123]?[0-9])-0?([123]?[0-9])<.')
 
     reg_expr_t = re.compile('.*?td +id="time.*?>(.+?)<.td')
 
@@ -79,28 +83,29 @@ def parse_url_file(file_content):
 
         m = reg_expr_t.match(line)
         if (m != None):
-            qq.vecka = veckonummer
-            qq.veckodag = veckodag
             if newEntry == True:
                 vek.append(qq)
                 qq = Schemaevent()
             newEntry = True
+            qq.veckodag = veckodag
+            qq.vecka = veckonummer
             qq.tid = m.group(1)
+            qq.datum = datum
             next
 
         m = reg_expr_d.match(line)
         if (m != None):
             veckodag = m.group(1)
-            qq.datum = m.group(3) + "/" + m.group(2)
-
+            datum = m.group(3) + "/" + m.group(2)
             next
 
         m = reg_expr_w.match(line)
         if (m != None):
             veckodag = m.group(1)
-            qq.datum = m.group(3) + "/" + m.group(2)
+            veckonummer = m.group(4)
+            datum = m.group(3) + "/" + m.group(2)
             next
-    #print(len(vek))
+    vek.append(qq)
     return vek
 
 
