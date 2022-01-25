@@ -9,7 +9,7 @@ urlfile = "DD1321.htm"
 #
 # imports and defs
 #
-import re, getopt, sys, urllib.request
+import re, getopt, sys, urllib.request, json
 
 
 class Schemaevent:
@@ -130,6 +130,30 @@ def get_file_content(file_name):
     file_content = infil.read()
     return file_content
 
+###########################################################################
+##
+## usage
+##
+## IN
+##
+## OUT
+##
+def get_url_content():
+    schemaurl = "https://www.kth.se/social/api/schema/v2/course/"
+    course = "DD1321"
+    start = "?startTime=2022-01-14"
+    schemaurl += course #+ start
+
+    request_data = urllib.request.urlopen(schemaurl).read()  # hämtar data från REST-servern
+    utf_data = request_data.decode('utf-8')  # översätter u00f6 -> ö
+    datastruktur = json.loads(utf_data)  # lägger in i en pythonstruktur
+
+    print(datastruktur["entries"][2])
+    print(datastruktur["entries"][2]["start"])
+    print(datastruktur["entries"][2]["end"])
+    print(datastruktur["entries"][2]["title"])
+    for x in datastruktur["entries"][2]["locations"]:
+        print(x["name"])
 
 ###########################################################################
 ##
@@ -188,7 +212,6 @@ def parse_command_line_args():
 ## OUT
 ##
 def print_schedule(data):
-    #print(len(data))
     print("----------- Schedule -------------")
     for item in data:
         print(item)
@@ -240,6 +263,7 @@ def main():
     filedata = get_file_content(urlfile)
     sched = parse_url_file(filedata)
 
+    get_url_content()
     # Do something
     if 'check' in todo:
         search_data(todo["check"], sched)
