@@ -194,7 +194,7 @@ def usage():
 ## parse_command_line_args
 ##
 ## IN
-##
+## 
 ## OUT
 ## Dictionary med kommandot som nyckel
 def parse_command_line_args():
