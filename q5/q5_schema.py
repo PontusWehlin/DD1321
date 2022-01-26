@@ -29,6 +29,18 @@ def usage():
 def main():
     if len(sys.argv) == 1:
         usage()
+        exit()
+    elif len(sys.argv) == 2:
+        datastruktur = q5.get_url_content(sys.argv[1])
+
+    for i in range(len(datastruktur["entries"])):
+        print(datastruktur["entries"][i]["start"][:13], end="-")
+        print(datastruktur["entries"][i]["end"][11:13], end=" ")
+        print("{:<20}".format(datastruktur["entries"][i]["title"]), end=" ")
+        for x in datastruktur["entries"][i]["locations"]:
+            print(x["name"], end=" ")
+        print()
+
 
 ###########################################################################
 
