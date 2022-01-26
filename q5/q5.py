@@ -138,9 +138,8 @@ def get_file_content(file_name):
 ##
 ## OUT
 ##
-def get_url_content():
+def get_url_content(course):
     schemaurl = "https://www.kth.se/social/api/schema/v2/course/"
-    course = "DD1321"
     start = "?startTime=2022-01-14"
     schemaurl += course #+ start
 
@@ -263,7 +262,7 @@ def main():
     filedata = get_file_content(urlfile)
     sched = parse_url_file(filedata)
 
-    get_url_content()
+    get_url_content("DD1321")
     # Do something
     if 'check' in todo:
         search_data(todo["check"], sched)
