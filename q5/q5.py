@@ -9,7 +9,7 @@ urlfile = "DD1321.htm"
 #
 # imports and defs
 #
-import re, getopt, sys, urllib.request, json
+import re, getopt, sys, urllib.request, json, datetime
 
 
 class Schemaevent:
@@ -138,22 +138,38 @@ def get_file_content(file_name):
 ##
 ## OUT
 ##
-def get_url_content():
+def get_url_content(course, start="YYYY-MM-DD", end = "YYYY-MM-DD"):
     schemaurl = "https://www.kth.se/social/api/schema/v2/course/"
-    course = "DD1321"
-    start = "?startTime=2022-01-14"
-    schemaurl += course #+ start
+    if start == "YYYY-MM-DD":
+        start = "?startTime=" + datetime.date.today().strftime("%Y-%m-%d")
+    else:
+        start = "?startTime=" + start
 
-    request_data = urllib.request.urlopen(schemaurl).read()  # hämtar data från REST-servern
-    utf_data = request_data.decode('utf-8')  # översätter u00f6 -> ö
-    datastruktur = json.loads(utf_data)  # lägger in i en pythonstruktur
+    if end == "YYYY-MM-DD":
+        end = "&endTime=" + str(int(datetime.date.today().strftime("%Y"))+int(datetime.date.today().strftime("%m"))+6//12) + "-" + str((int(datetime.date.today().strftime("%m"))+6)%12) + "-30"
+    else:
+        end= "&endTime=" + end
 
-    print(datastruktur["entries"][2])
-    print(datastruktur["entries"][2]["start"])
-    print(datastruktur["entries"][2]["end"])
-    print(datastruktur["entries"][2]["title"])
-    for x in datastruktur["entries"][2]["locations"]:
-        print(x["name"])
+    schemaurl += course + start + end
+
+    try:
+        request_data = urllib.request.urlopen(schemaurl).read()  # hämtar data från REST-servern
+        utf_data = request_data.decode('utf-8')  # översätter u00f6 -> ö
+        datastruktur = json.loads(utf_data)  # lägger in i en pythonstruktur
+
+        #for i in range(len(datastruktur["entries"])):
+        #    print(datastruktur["entries"][i]["start"])
+        #    print(datastruktur["entries"][i]["end"])
+        #    print(datastruktur["entries"][i]["title"])
+        #    for x in datastruktur["entries"][i]["locations"]:
+        #        print(x["name"])
+
+        return datastruktur
+    except urllib.error.HTTPError as exception:
+        print(exception)
+        print("!!Kontrollera kurskoden!!")
+
+
 
 ###########################################################################
 ##
@@ -180,7 +196,7 @@ def usage():
 ## IN
 ##
 ## OUT
-##
+## Dictionary med kommandot som nyckel
 def parse_command_line_args():
     try:
         opts, rest = getopt.getopt(sys.argv[1:], "hc:u", ["help", "check=", "update"])
@@ -222,7 +238,7 @@ def print_schedule(data):
 ## search_data
 ##
 ## IN
-##
+## What - Är vilken vecka som search ska kolla om "check" används i input
 ## OUT
 ##
 def search_data(what, dataset):
@@ -263,7 +279,7 @@ def main():
     filedata = get_file_content(urlfile)
     sched = parse_url_file(filedata)
 
-    get_url_content()
+    get_url_content("DD1321")
     # Do something
     if 'check' in todo:
         search_data(todo["check"], sched)
