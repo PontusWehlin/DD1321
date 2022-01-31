@@ -145,7 +145,7 @@ def get_url_content(course, start="YYYY-MM-DD", end = "YYYY-MM-DD"):
     else:
         start = "?startTime=" + start
 
-    if end == "YYYY-MM-DD":
+    if end == "YYYY-MM-DD": # Sätter endTime till ett halvår efter startTime om inget annat anges
         end = "&endTime=" + str(int(datetime.date.today().strftime("%Y"))+int(datetime.date.today().strftime("%m"))+6//12) + "-" + str((int(datetime.date.today().strftime("%m"))+6)%12) + "-30"
     else:
         end= "&endTime=" + end
@@ -156,18 +156,10 @@ def get_url_content(course, start="YYYY-MM-DD", end = "YYYY-MM-DD"):
         request_data = urllib.request.urlopen(schemaurl).read()  # hämtar data från REST-servern
         utf_data = request_data.decode('utf-8')  # översätter u00f6 -> ö
         datastruktur = json.loads(utf_data)  # lägger in i en pythonstruktur
-
-        #for i in range(len(datastruktur["entries"])):
-        #    print(datastruktur["entries"][i]["start"])
-        #    print(datastruktur["entries"][i]["end"])
-        #    print(datastruktur["entries"][i]["title"])
-        #    for x in datastruktur["entries"][i]["locations"]:
-        #        print(x["name"])
-
         return datastruktur
     except urllib.error.HTTPError as exception:
-        print(exception)
-        print("!!Kontrollera kurskoden!!")
+        print(sys.argv[1],"is not a valid course code")
+        sys.exit()
 
 
 
