@@ -23,6 +23,7 @@ def identify_tone(frequenzy):
             tone = tone_dict[frequenzy_list[i]]
             min = abs(frequenzy-frequenzy_list[i])
     if min >10:
+        print('Stort avstånd till närmaste ton')
         print(min)
     return tone
 
@@ -41,6 +42,7 @@ def main():
     for i in [0,2,4]:
         tones.append(tone_amplitude_dict[i])
     tone = sum(tones)/len(tones)
+    print(tones)
     tone = identify_tone(tone)
     print(tone)
 
