@@ -1,4 +1,3 @@
-import Test_tracks
 #Global variabel
 List_length = 100000000
 
