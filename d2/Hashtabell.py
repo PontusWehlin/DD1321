@@ -1,13 +1,18 @@
+import Test_tracks
+#Global variabel
+List_length = 100000000
+
 class HashNode:
     def __init__(self):
         self.hash = 1
 
     def __hash__(self, key):
+        weight = 1
         for i in range(len(key)):
-            self.hash *= ord(key[i]) * (i+1)
-            if self.hash > 10000:
-                self.hash = self.hash%10000
-        self.hash = (self.hash//2)*2
+            self.hash += ord(key[i]) * weight
+            weight *= 10
+            if self.hash > List_length:
+                self.hash = (self.hash % List_length) + 1
 
     def store(self,key,data):
         self.data = data
@@ -17,48 +22,59 @@ class HashNode:
 
 class Hashtabell:
     def __init__(self):
-        self.dict = [0]*10000
+        self.dict = [None] * List_length
 
     def __getitem__(self, key):
-        if (key in self.dict) and (self.dict.index(key) == (self.dict.index(key)//2)*2):
-            return self.dict[self.dict.index(key)+1]
-        else:
-            raise KeyError(key + ' not a valid key')
+        pass
 
     def __contains__(self, key):
-        return key in self.dict
+        pass
 
     def store(self,key,data):
         nod = HashNode()
         nod.store(key,data)
-        if self.dict[nod.hash] == 0 or (self.dict[nod.hash] == key):
-            self.dict[nod.hash] = key
-            self.dict[nod.hash+1] = data
+        if (self.dict[nod.hash] == None) or (self.dict[nod.hash].key == nod.key):
+            self.dict[nod.hash] = nod
         else:
             probing = True
+            index = nod.hash
             timeout = 0
             while probing:
-                timeout += 1
-                if timeout == 100:
-                    print('ERROR')
-                    break
-                nod.hash *= 2
-                if nod.hash > 10000:
-                    nod.hash = nod.hash%10000
-                    nod.hash = (nod.hash//2)*2
-                if self.dict[nod.hash] == 0:
-                    self.dict[nod.hash] = key
-                    self.dict[nod.hash + 1] = data
+                index *= 2
+                if index > List_length:
+                    index = (index % List_length)+1
+                if timeout == 10000:
                     probing = False
+                    print('Error')
+                    print(index)
+
+                if (self.dict[index] == None) or (self.dict[index].key == nod.key):
+                    self.dict[index] = nod
+
+                timeout += 2
+
+
+    def keys(self):
+        keys=[]
+        for nod in self.dict:
+            if nod != None:
+                keys.append(nod.key)
+        return keys
+
+def import_tracks(filename, hashdict):
+    file = open(filename,"r",encoding="UTF-8")
+    file_lines = file.readlines()
+    for line in file_lines[:200]:
+        line_parts = line.split("<SEP>")
+        hashdict.store(line_parts[-2], line_parts[-1].rstrip("\n"))
+    return hashdict
 
 
 def main():
     hashdict = Hashtabell()
-    hashdict.store('Noak','pissmac')
-    hashdict.store('PP','HP')
-    print(hashdict['PP'])
-    print(hashdict['Noak'])
-
+    hashdict = import_tracks("unique_tracks.txt", hashdict)
+    print(len(hashdict.keys()))
+    print(hashdict.keys()[:50])
 
 
 

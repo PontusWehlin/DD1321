@@ -5,13 +5,13 @@ def import_tracks(filename, hashdict):
     file_lines = file.readlines()
     for line in file_lines:
         line_parts = line.split("<SEP>")
-        hashdict.store(line_parts[-1].rstrip("\n"), line_parts[-2])
+        hashdict.store(line_parts[-2], line_parts[-1].rstrip("\n"))
     return hashdict
 
 def Test(hashdict):
-    print("Should be True: ", 'Goodbye' in hashdict)
-    print("Should be Waldemar Bastos: ", hashdict["N Gana"])
-    print("Should be Martin Sexton: ", hashdict.search("In The Journey"))
+    print("Should be True: ", 'Kris Kross' in hashdict)
+    print("Should be Muxima: ", hashdict["Waldemar Bastos"])
+    print("Should be Auld Lang Syne: ", hashdict.search("Martin Sexton"))
 
 def main():
     hashdict = DictHash.DictHash()
