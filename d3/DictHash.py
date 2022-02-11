@@ -9,7 +9,7 @@ class DictHash:
         return self.__dict[nyckel]
 
     def keys(self):
-        return self.__dict.keys()
+        return list(self.__dict.keys())
 
     def __getitem__(self, nyckel):
         return self.search(nyckel)
