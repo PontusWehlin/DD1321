@@ -6,7 +6,7 @@ class HashNode:
         self.hash = 1
         self.index = 1
 
-    def __hash__(self, key):
+    def __hash__(self, key): # Hashningsfunktion som summerar Ascii värdet av varje bokstav samt väger bokstavsordningen
         weight = 1
         for i in range(len(key)):
             self.hash += ord(key[i]) * weight
@@ -49,6 +49,7 @@ class Hashtabell:
             self.dict[nod.hash] = nod
             nod.index = nod.hash
         else:
+            # Här börjar probningen vid krock där indexet i listan dubblas hela tiden
             probing = True
             index = nod.hash
             timeout = 0
@@ -56,15 +57,15 @@ class Hashtabell:
                 index *= 2
                 if index > List_length:
                     index = (index % List_length)+1
-                if timeout == 100:
+                if timeout == 100: #Tillåter funktionen att försöka proba 100 gånger, förhindrar oändliga loopar
                     probing = False
                     print('Error')
-                    print(index)
                 if (self.dict[index] == None) or (self.dict[index].key == nod.key):
                     self.dict[index] = nod
                     nod.index = index
                     probing = False
                 timeout += 1
+
     def remove(self, key):
         if self.__contains__(key):
             index = self.__index()
