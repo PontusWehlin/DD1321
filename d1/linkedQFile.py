@@ -26,20 +26,25 @@ class LinkedQ:
             return True
         else:
             return False
-    def remove(self,x):
-        try:
-            if self.__first == None:
-                pass
-            elif x == 1:
-                self.__first = self.__first.next
-            else:
-                nod = self.__first
-                for i in range(x-2):
-                    nod = nod.next
-                nod.next = nod.next.next
-        except AttributeError:
-            pass
 
+    def remove(self,x):
+        if self.__first == None:
+            pass
+        elif self.__first.value == x:
+            value = self.__first.value
+            self.__first = self.__first.next
+        else:
+            current_node = self.__first.next
+            prev_node = self.__first
+            while current_node != self.__last and current_node != None:
+                if current_node.value == x:
+                    prev_node.next = prev_node.next.next
+                    break
+                current_node = current_node.next
+                prev_node = prev_node.next
+            if self.__last.value == x:
+                self.__last = prev_node
+                prev_node.next = None
 
 def basictest():
     print('Test: Kontrollerar 2 tomma köer...')
@@ -65,8 +70,8 @@ def basictest():
     kö.enqueue(3)
     kö.remove(2)
     kö.remove(1)
-    kö.remove(3)
     kö.remove(1)
+    kö.remove(3)
     print(kö.isEmpty())
 
     print('\nTest: Kontrollerar om det går att ta bort det elementet bakifrån...')
