@@ -148,8 +148,10 @@ def main():
 
     sort_list = Quicksort(lista)
     print(type(sort_list))
-    sorttid = timeit.timeit(stmt=lambda: linsearch(lista, testartist), number=100)
-    print("Linjärsökningen tog", round(linjtid, 4), "sekunder")
+    #sorttid = timeit.timeit(stmt=lambda: Quicksort(lista), number=100)
+    #print("Quicksort tog", round(sorttid, 4), "sekunder")
+    for i in range(10):
+        print(sort_list[i].artist)
 
     linjsorttid = timeit.timeit(stmt=lambda: linsearch(sort_list, testartist), number=100)
     print('Linjärsökning för sorterad lista tog', round(linjsorttid, 4), 'sekunder')
