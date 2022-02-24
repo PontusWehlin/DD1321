@@ -68,37 +68,69 @@ def linsearch(list, testartist):
 #             break
 #     data[v], data[h] = data[h], data[v]
 #     return v
-def quickSort(arr, low, high):
-    high = len(arr)-1
+#
+# def quickSort(arr, low, high):
+#     high = len(arr)-1
+#     low = 0
+#     if len(arr) == 1:
+#         return arr
+#     if low < high:
+#         # pi is partitioning index, arr[p] is now
+#         # at right place
+#         pi = partition(arr, low, high)
+#
+#         # Separately sort elements before
+#         # partition and after partition
+#         quickSort(arr, low, pi - 1)
+#         quickSort(arr, pi + 1, high)
+#
+# def partition(arr, low, high):
+#     i = (low - 1)  # index of smaller element
+#     pivot = arr[high]  # pivot
+#
+#     for j in range(low, high):
+#
+#         # If current element is smaller than or
+#         # equal to pivot
+#         if arr[j] < pivot:
+#             # increment index of smaller element
+#             i = i + 1
+#             arr[i], arr[j] = arr[j], arr[i]
+#
+#     arr[i + 1], arr[high] = arr[high], arr[i + 1]
+#     return (i + 1)
+
+def Quicksort(list):
+    high = len(list) - 1
     low = 0
-    if len(arr) == 1:
-        return arr
-    if low < high:
-        # pi is partitioning index, arr[p] is now
-        # at right place
-        pi = partition(arr, low, high)
+    switched = False # håller reda på om man bytt plats på damen
 
-        # Separately sort elements before
-        # partition and after partition
-        quickSort(arr, low, pi - 1)
-        quickSort(arr, pi + 1, high)
+    if len(list) < 2:
+        return list
+    else:
+        queen = low
+        check = high
+        while queen != check:
+            if not switched:
+                if list[check] < list[queen]:
+                    switched = True
+                    list[queen], list[check] = list[check], list[queen]
+                    queen, check = check, queen
+                    check += 1
+                else:
+                    check -=1
+            else:
+                if list[queen] < list[check]:
+                    switched = False
+                    list[queen], list[check] = list[check], list[queen]
+                    queen, check = check, queen
+                    check -= 1
+                else:
+                    check += 1
 
-def partition(arr, low, high):
-    i = (low - 1)  # index of smaller element
-    pivot = arr[high]  # pivot
-
-    for j in range(low, high):
-
-        # If current element is smaller than or
-        # equal to pivot
-        if arr[j] < pivot:
-            # increment index of smaller element
-            i = i + 1
-            arr[i], arr[j] = arr[j], arr[i]
-
-    arr[i + 1], arr[high] = arr[high], arr[i + 1]
-    return (i + 1)
-
+        list[low:queen+1] = Quicksort(list[low:queen+1])
+        list[(queen+1):high+1] = Quicksort(list[(queen+1):high+1])
+        return list
 
 def main():
     filename = "unique_tracks.txt"
@@ -114,8 +146,11 @@ def main():
     linjtid = timeit.timeit(stmt=lambda: linsearch(lista, testartist), number=100)
     print("Linjärsökningen tog", round(linjtid, 4), "sekunder")
 
-    sort_list = quickSort(lista, 0, len(lista)-1)
+    sort_list = Quicksort(lista)
     print(type(sort_list))
+    sorttid = timeit.timeit(stmt=lambda: linsearch(lista, testartist), number=100)
+    print("Linjärsökningen tog", round(linjtid, 4), "sekunder")
+
     linjsorttid = timeit.timeit(stmt=lambda: linsearch(sort_list, testartist), number=100)
     print('Linjärsökning för sorterad lista tog', round(linjsorttid, 4), 'sekunder')
 
