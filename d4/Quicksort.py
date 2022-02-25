@@ -28,7 +28,7 @@ def Quicksort(list):
                 else:
                     check += 1
 
-        list[low:queen+1] = Quicksort(list[low:queen+1])
+        list[low:queen] = Quicksort(list[low:queen])
         list[(queen+1):high+1] = Quicksort(list[(queen+1):high+1])
         return list
 
