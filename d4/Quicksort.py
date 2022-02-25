@@ -1,4 +1,4 @@
-
+import math
 
 def Quicksort(list):
     high = len(list) - 1
@@ -32,12 +32,25 @@ def Quicksort(list):
         list[(queen+1):high+1] = Quicksort(list[(queen+1):high+1])
         return list
 
+def binarysearch(list, search):
+    print('test')
+    high = len(list)-1
+    mid = (high//2)
+    if search == list[mid]:
+        return mid
+    elif search < list[mid]:
+        binarysearch(list[0:mid],search)
+    else:
+        binarysearch(list[mid+1:high],search)
 
 def test():
     v = [5, 3, 7, 6, 2, 4, 8, 9, 1]
     print(v)
     sorted = Quicksort(v)
     print(sorted)
+    element = binarysearch(sorted,4)
+    print(type(element))
+    print(element)
 
 
 

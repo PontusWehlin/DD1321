@@ -1,4 +1,4 @@
-import timeit, sys
+import timeit, sys, random
 sys.setrecursionlimit(100000)
 
 
@@ -20,7 +20,7 @@ def readfile(filename):
     songlist = []
     songdir = {}
     raw_file = open(filename, 'r', encoding='UTF-8')
-    for i in range(2500):
+    for i in range(10000):
         line = raw_file.readline()
         lineparts = line.split('<SEP>')
         song = Song(lineparts[3].rstrip('\n'), lineparts[2], lineparts[0], lineparts[1])
@@ -33,7 +33,7 @@ def linsearch(list, testartist):
         if testartist == list[i].artist:
             return list[i]
 
-def Quicksort(list):
+def quicksort(list):
     high = len(list) - 1
     low = 0
     switched = False        #False = Damen till vänster. True = Damen till höger
@@ -61,9 +61,20 @@ def Quicksort(list):
                 else:
                     check += 1
 
-        list[low:queen] = Quicksort(list[low:queen])
-        list[(queen+1):high+1] = Quicksort(list[(queen+1):high+1])
+        list[low:queen] = quicksort(list[low:queen])
+        list[(queen+1):high+1] = quicksort(list[(queen+1):high+1])
         return list
+
+def binarysearch(list, search):
+    high = len(list)-1
+    mid = high//2
+    if search == list[mid]:
+        return mid
+    elif search < list[mid]:
+        binarysearch(list[:mid],search)
+    else:
+        binarysearch(list[mid+1:],search)
+
 
 def main():
     filename = "unique_tracks.txt"
@@ -79,15 +90,23 @@ def main():
     linjtid = timeit.timeit(stmt=lambda: linsearch(lista, testartist), number=100)
     print("Linjärsökningen tog", round(linjtid, 4), "sekunder")
 
-    sort_list = Quicksort(lista)
+    sort_list = quicksort(lista)
     testartist = sort_list[-1].artist
+    for i in range(10):
+        print(sort_list[i].artist)
 
     linjsorttid = timeit.timeit(stmt=lambda: linsearch(sort_list, testartist), number=100)
     print('Linjärsökning för sorterad lista tog', round(linjsorttid, 4), 'sekunder')
 
-    sorttid = timeit.timeit(stmt=lambda: Quicksort(lista), number=1)
+    sorttid = timeit.timeit(stmt=lambda: quicksort(lista), number=10)
     print("Quicksort tog", round(sorttid, 4), "sekunder")
 
+    timevek = []
+    for i in range(1000):
+        time = timeit.timeit(stmt= lambda: linsearch(lista, lista[random.randint(0,len(lista)-1)].artist), number= 100)
+        timevek.append(time)
+    randomtime = sum(timevek)/len(timevek)
+    print('Linjärsökning i den osorterade listan för 1000 slumpade element tog i genomsnitt', round(randomtime,4), 'sekunder')
 
 
 if __name__ == '__main__':
