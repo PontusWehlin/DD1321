@@ -1,5 +1,4 @@
-import timeit, sys, random
-sys.setrecursionlimit(100000)
+import timeit, random
 
 
 class Song:
@@ -33,37 +32,37 @@ def linsearch(list, testartist):
         if testartist == list[i].artist:
             return list[i]
 
-def quicksort(list):
-    high = len(list) - 1
-    low = 0
-    switched = False        #False = Damen till vänster. True = Damen till höger
-
-    if len(list) < 2:
-        return list
-    else:
-        queen = low
-        check = high
-        while queen != check:
-            if not switched:    #Detta körs när damen är till vänster
-                if list[check] < list[queen]:
-                    switched = True
-                    list[queen], list[check] = list[check], list[queen]
-                    queen, check = check, queen
-                    check += 1
-                else:
-                    check -=1
-            else:               #Detta körs när damen är till höger
-                if list[queen] < list[check]:
-                    switched = False
-                    list[queen], list[check] = list[check], list[queen]
-                    queen, check = check, queen
-                    check -= 1
-                else:
-                    check += 1
-
-        list[low:queen] = quicksort(list[low:queen])
-        list[(queen+1):high+1] = quicksort(list[(queen+1):high+1])
-        return list
+# def quicksort(list):
+#     high = len(list) - 1
+#     low = 0
+#     switched = False        #False = Damen till vänster. True = Damen till höger
+#
+#     if len(list) < 2:
+#         return list
+#     else:
+#         queen = low
+#         check = high
+#         while queen != check:
+#             if not switched:    #Detta körs när damen är till vänster
+#                 if list[check] < list[queen]:
+#                     switched = True
+#                     list[queen], list[check] = list[check], list[queen]
+#                     queen, check = check, queen
+#                     check += 1
+#                 else:
+#                     check -=1
+#             else:               #Detta körs när damen är till höger
+#                 if list[queen] < list[check]:
+#                     switched = False
+#                     list[queen], list[check] = list[check], list[queen]
+#                     queen, check = check, queen
+#                     check -= 1
+#                 else:
+#                     check += 1
+#
+#         list[low:queen] = quicksort(list[low:queen])
+#         list[(queen+1):high+1] = quicksort(list[(queen+1):high+1])
+#         return list
 
 def binarysearch(list, search):
     high = len(list)-1
