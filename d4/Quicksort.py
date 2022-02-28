@@ -1,22 +1,14 @@
 def quicksortwhile(list):
     low = 0
     high = len(list)-1
-    queen = low
-    check = high
     pivots = [low, high]
-    i = 0
-    prevqueen = None
-    prevcheck = None
+
+    if len(list) < 2:
+        return(list)
 
     while True:
+        queen, check = pivots[0], pivots[1]
         switched = False
-        if prevqueen == queen and prevcheck == check:
-            pivots.pop()
-
-        queen = pivots[0]
-        prevqueen = queen
-        check = pivots[1]
-        prevcheck = check
         while queen != check:
             if not switched:
                 if list[check] < list[queen]:
@@ -25,7 +17,7 @@ def quicksortwhile(list):
                     queen, check = check, queen
                     check += 1
                 else:
-                    check -= 1
+                    check -=1
             else:
                 if list[queen] < list[check]:
                     switched = False
@@ -34,31 +26,26 @@ def quicksortwhile(list):
                     check -= 1
                 else:
                     check += 1
+        print('---------')
+        print(pivots)
+        if queen in pivots: pivots.remove(queen)
+        if queen < pivots[0]: pass
+        elif queen-1 not in pivots and queen-1 >= 0:
+            pivots.append(queen-1)
+            if queen+1 not in pivots: pivots.append(queen+1)
+        elif queen+1 not in pivots: pivots.append(queen+1)
 
-        print('---')
-        print(pivots)
-        if queen not in pivots and queen != 0:
-            if not switched:
-                pivots.append(queen+1)
-            else:
-                pivots.append(queen-1)
-            print(pivots)
-            pivots.sort()
-        print(pivots)
-        while (pivots[1]-pivots[0]) < 2:
-            print('pop')
-            print(list)
-            pivots = pivots[1:]
-        print(pivots)
-        print(list)
-        # if pivots[0] == 0:
-        #     if i > 0:
-        #         pivots[0] +=1
-        #     i += 1
-        if len(pivots) == 1:
+        if len(pivots) < 2:
             break
-    return list
 
+        pivots.sort()
+
+        print(pivots)
+        if pivots[1] - pivots[0] < 2:
+            pivots.pop(0)
+        print(pivots)
+
+    return list
 
 
 def Quicksort(list):
@@ -109,9 +96,9 @@ def test():
     print(v)
     sorted = quicksortwhile(v)
     print(sorted)
-    element = binarysearch(sorted,4)
-    print(type(element))
-    print(element)
+    #element = binarysearch(sorted,4)
+    #print(type(element))
+    #print(element)
 
 
 
