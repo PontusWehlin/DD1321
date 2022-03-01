@@ -34,11 +34,11 @@ def readfile(filename, amount):
 
 def addsonglength(filename, list):
     raw_file = open(filename, 'r', encoding='UTF-8')
-    list = quicksort(list)
-    for i in range(len(raw_file.readlines())):
+    for i in range(999988):
         line = raw_file.readline()
         lineparts = line.split('\t')
-        list[binarysearch(list, lineparts[1])].length = lineparts[3]
+        index = binarysearch(list, lineparts[1])
+        list[index].length = lineparts[3]
     return list
 
 def linsearch(list, testartist):
@@ -175,7 +175,8 @@ def main():
     antal_element = len(list)
     print("Antal element =", antal_element)
 
-    list = addsonglength(file_del2, list)
+    sortlist = quicksort(list)
+    list = addsonglength(file_del2, sortlist)
     for i in range(10):
         print(list[i].artist)
         print(list[i].songname)
