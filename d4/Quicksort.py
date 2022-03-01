@@ -28,7 +28,10 @@ def quicksortwhile(list):
                     check += 1
         print('---------')
         print(pivots)
-        if queen in pivots: pivots.remove(queen)
+        if queen in pivots:
+            pivots.remove(queen)
+            if queen+1 <= len(list):
+                pivots.append(queen+1)
         if queen < pivots[0]: pass
         elif queen-1 not in pivots and queen-1 >= 0:
             pivots.append(queen-1)
