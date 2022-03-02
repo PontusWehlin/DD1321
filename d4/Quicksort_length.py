@@ -1,21 +1,21 @@
-def quicksort(list):
-    quickSortIterative(list, 0, len(list)-1)
-
-
+##### TAGET FRÅN STACKOVERFLOW #######
 # This function is same in both iterative and recursive
 def partition(arr, l, h):
     i = (l - 1)
-    x = arr[h]
+    x = arr[h].length
 
     for j in range(l, h):
-        if arr[j] <= x:
+        if arr[j].length < x:
+            # increment index of smaller element
+            i = i + 1
+            arr[i], arr[j] = arr[j], arr[i]
+        elif arr[j].length == x:
             # increment index of smaller element
             i = i + 1
             arr[i], arr[j] = arr[j], arr[i]
 
     arr[i + 1], arr[h] = arr[h], arr[i + 1]
     return (i + 1)
-
 
 # Function to do Quick sort
 # arr[] --> Array to be sorted,
@@ -34,10 +34,11 @@ def quickSortIterative(arr, l, h):
     stack[top] = l
     top = top + 1
     stack[top] = h
-
+    counter = 0
     # Keep popping from stack while is not empty
     while top >= 0:
-
+        counter += 1
+        if type(counter/100) == int: print(counter)
         # Pop h and l
         h = stack[top]
         top = top - 1
@@ -63,14 +64,4 @@ def quickSortIterative(arr, l, h):
             stack[top] = p + 1
             top = top + 1
             stack[top] = h
-
-
-# Driver code to test above
-def main():
-    arr = [4, 3, 5, 2, 1, 3, 2, 3]
-    quicksort(arr)
-    print("Sorted array is:")
-    for i in range(len(arr)):
-        print("%d" % arr[i])
-
-main()
+    return arr

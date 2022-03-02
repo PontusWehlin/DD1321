@@ -1,4 +1,4 @@
-import timeit, random
+import timeit, random, Quicksort, Quicksort_length
 
 
 class Song:
@@ -7,7 +7,7 @@ class Song:
         self.artist = artist
         self.trackid = trackid
         self.songid = songid
-        self.length = None
+        self.length = 0
 
     def __str__(self):
         return(self.songname + ' - ' + self.artist)
@@ -38,83 +38,33 @@ def addsonglength(filename, list):
         line = raw_file.readline()
         lineparts = line.split('\t')
         index = binarysearch(list, lineparts[1])
-        list[index].length = lineparts[3]
+        list[index].length = float(lineparts[3])
     return list
 
-def linsearch(list, testartist):
+def linsearch_artist(list, testartist):
     for i in range(len(list)):
         if testartist == list[i].artist:
             return list[i]
 
+# Hittar den längsta låten och retunerar dess index
+def linesearch_length(list):
+    max = list[0].length
+    index = 0
+    for i in range(len(list)):
+        if list[i].length == None:
+            pass
+        elif max < list[i].length:
+            max = list[i].length
+            index = i
+    return index
+
 def quicksort(list):
-    quickSortIterative(list, 0, len(list)-1)
+    Quicksort.quickSortIterative(list, 0, len(list)-1)
     return list
 
-##### TAGET FRÅN STACKOVERFLOW #######
-# This function is same in both iterative and recursive
-def partition(arr, l, h):
-    i = (l - 1)
-    x = arr[h]
-
-    for j in range(l, h):
-        if arr[j] < x:
-            # increment index of smaller element
-            i = i + 1
-            arr[i], arr[j] = arr[j], arr[i]
-        elif arr[j] == x:
-            # increment index of smaller element
-            i = i + 1
-            arr[i], arr[j] = arr[j], arr[i]
-
-    arr[i + 1], arr[h] = arr[h], arr[i + 1]
-    return (i + 1)
-
-# Function to do Quick sort
-# arr[] --> Array to be sorted,
-# l  --> Starting index,
-# h  --> Ending index
-def quickSortIterative(arr, l, h):
-    # Create an auxiliary stack
-    size = h - l + 1
-    stack = [0] * (size)
-
-    # initialize top of stack
-    top = -1
-
-    # push initial values of l and h to stack
-    top = top + 1
-    stack[top] = l
-    top = top + 1
-    stack[top] = h
-
-    # Keep popping from stack while is not empty
-    while top >= 0:
-
-        # Pop h and l
-        h = stack[top]
-        top = top - 1
-        l = stack[top]
-        top = top - 1
-
-        # Set pivot element at its correct position in
-        # sorted array
-        p = partition(arr, l, h)
-
-        # If there are elements on left side of pivot,
-        # then push left side to stack
-        if p - 1 > l:
-            top = top + 1
-            stack[top] = l
-            top = top + 1
-            stack[top] = p - 1
-
-        # If there are elements on right side of pivot,
-        # then push right side to stack
-        if p + 1 < h:
-            top = top + 1
-            stack[top] = p + 1
-            top = top + 1
-            stack[top] = h
+def quicksort_length(list):
+    Quicksort_length.quickSortIterative(list, 0, len(list)-1)
+    return list
 
 def binarysearch(list, search):
     low = 0
@@ -132,7 +82,6 @@ def binarysearch(list, search):
 
 def timing():
     filename = "unique_tracks.txt"
-    # file_del2 = "sang-artist-data.txt"
 
     lista, dictionary = readfile(filename, 1000)
     antal_element = len(lista)
@@ -141,13 +90,13 @@ def timing():
     sista = lista[len(lista) - 1]
     testartist = sista.artist
 
-    linjtid = timeit.timeit(stmt=lambda: linsearch(lista, testartist), number=100)
+    linjtid = timeit.timeit(stmt=lambda: linsearch_artist(lista, testartist), number=100)
     print("Linjärsökningen tog", round(linjtid, 4), "sekunder")
 
     sort_list = quicksort(lista)
     testartist = sort_list[-1].artist
 
-    linjsorttid = timeit.timeit(stmt=lambda: linsearch(sort_list, testartist), number=100)
+    linjsorttid = timeit.timeit(stmt=lambda: linsearch_artist(sort_list, testartist), number=100)
     print('Linjärsökning för sorterad lista tog', round(linjsorttid, 4), 'sekunder')
 
     sorttid = timeit.timeit(stmt=lambda: quicksort(lista), number=1)
@@ -155,7 +104,7 @@ def timing():
 
     timevek = []
     for i in range(1000):
-        time = timeit.timeit(stmt=lambda: linsearch(lista, lista[random.randint(0, len(lista) - 1)].artist), number=100)
+        time = timeit.timeit(stmt=lambda: linsearch_artist(lista, lista[random.randint(0, len(lista) - 1)].artist), number=100)
         timevek.append(time)
     randomtime = sum(timevek) / len(timevek)
     print('Linjärsökning i den osorterade listan för 1000 slumpade element tog i genomsnitt', round(randomtime, 4),
@@ -171,21 +120,33 @@ def main():
     filename = "unique_tracks.txt"
     file_del2 = "sang-artist-data.txt"
 
-    list, dictionary = readfile(filename, 1000000)
+    list, dictionary = readfile(filename, 1000)
     antal_element = len(list)
-    print("Antal element =", antal_element)
 
     sortlist = quicksort(list)
     list = addsonglength(file_del2, sortlist)
-    for i in range(10):
-        print(list[i].artist)
-        print(list[i].songname)
-        print(list[i].length)
+    print("Antal element =", antal_element)
+
+    k = 10
+    #Metod 1 - linjärsök och plocka bort den längsta
+    list_1 = list
+    for i in range(k-1):
+        list_1.pop(linesearch_length(list_1))
+    index = linesearch_length(list_1)
+    print('Den k:te längsta låten är',list_1[index].songname,'längden',list_1[index].length)
+
+    #Metod 2 - Sortera och plocka ut den k längsta låten
+    sort_length = quicksort_length(list)
+    print('Den k:te längsta låten är', sort_length[k - 2],'längden', sort_length[k-2].length)
+    print('Den k:te längsta låten är', sort_length[k - 1],'längden', sort_length[k-1].length)
+    print('Den k:te längsta låten är', sort_length[k],'längden', sort_length[k].length)
+    print('Den k:te längsta låten är', sort_length[k + 1],'längden', sort_length[k+1].length)
+
 
 if __name__ == '__main__':
-    print('Choose one of the following')
-    print('1. Timing of sorting')
-    print('2. Other')
+    print('Välj en av följande')
+    print('1. Tidtagning')
+    print('2. Annat')
     i = int(input('-> '))
     if i == 1:
         timing()
