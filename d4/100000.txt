@@ -5,7 +5,3 @@ Quicksort tog 699.7038 sekunder
 Linjärsökning i den osorterade listan för 1000 slumpade element tog i genomsnitt 1.1294 sekunder
 Binärsökning tog 0.1023 sekunder
 Uppslagning i pythons dictionary tog 0.0 sekunder
-Choose one of the following
-1. Timing of sorting
-2. Other
--> 

@@ -91,7 +91,7 @@ def method_2(list, k):
 def timing():
     filename = "unique_tracks.txt"
 
-    lista, dictionary = readfile(filename, 1000)
+    lista, dictionary = readfile(filename, 100000)
     antal_element = len(lista)
     print("Antal element =", antal_element)
 
@@ -134,23 +134,27 @@ def main():
     sortlist = quicksort(list)
     list = addsonglength(file_del2, sortlist)
     print("Antal element =", antal_element)
+    print('börjar sortera')
+    quicksort(list)
+    print('sorterat klart')
 
-    for k in [10, 20, 30]:
+    k = 4
+    while k <= 30:
         print('--')
         #Metod 1 - linjärsök och plocka bort den längsta
-        method1time = timeit.timeit(stmt=lambda: method_1(list.copy(), k), number = 1)
+        method1time = timeit.timeit(stmt=lambda: method_1(list.copy(), k), number = 100)
         print('Med ett k på',k,'tog metod 1',round(method1time,4),'sekunder')
 
         #Metod 2 - Sortera och plocka ut den k längsta låten
         method2time = timeit.timeit(stmt=lambda: method_2(list.copy(), k), number = 1)
         print('Med ett k på', k, 'tog metod 2', round(method2time, 4), 'sekunder')
-
+        k += 4
 
 if __name__ == '__main__':
     print('Välj en av följande')
     print('1. Tidtagning')
     print('2. Annat')
-    i = int(input('-> '))
+    i = 2 #int(input('-> '))
     if i == 1:
         timing()
     elif i == 2:
