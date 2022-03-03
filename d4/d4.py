@@ -80,6 +80,14 @@ def binarysearch(list, search):
             return mid
     return -1
 
+def method_1(list, k):
+    for i in range(k - 1):
+        list.pop(linesearch_length(list))
+    index = linesearch_length(list)
+
+def method_2(list, k):
+    sort_length = quicksort_length(list)
+
 def timing():
     filename = "unique_tracks.txt"
 
@@ -120,27 +128,22 @@ def main():
     filename = "unique_tracks.txt"
     file_del2 = "sang-artist-data.txt"
 
-    list, dictionary = readfile(filename, 1000)
+    list, dictionary = readfile(filename, 100000)
     antal_element = len(list)
 
     sortlist = quicksort(list)
     list = addsonglength(file_del2, sortlist)
     print("Antal element =", antal_element)
 
-    k = 10
-    #Metod 1 - linjärsök och plocka bort den längsta
-    list_1 = list
-    for i in range(k-1):
-        list_1.pop(linesearch_length(list_1))
-    index = linesearch_length(list_1)
-    print('Den k:te längsta låten är',list_1[index].songname,'längden',list_1[index].length)
+    for k in [10, 20, 30]:
+        print('--')
+        #Metod 1 - linjärsök och plocka bort den längsta
+        method1time = timeit.timeit(stmt=lambda: method_1(list.copy(), k), number = 1)
+        print('Med ett k på',k,'tog metod 1',round(method1time,4),'sekunder')
 
-    #Metod 2 - Sortera och plocka ut den k längsta låten
-    sort_length = quicksort_length(list)
-    print('Den k:te längsta låten är', sort_length[k - 2],'längden', sort_length[k-2].length)
-    print('Den k:te längsta låten är', sort_length[k - 1],'längden', sort_length[k-1].length)
-    print('Den k:te längsta låten är', sort_length[k],'längden', sort_length[k].length)
-    print('Den k:te längsta låten är', sort_length[k + 1],'längden', sort_length[k+1].length)
+        #Metod 2 - Sortera och plocka ut den k längsta låten
+        method2time = timeit.timeit(stmt=lambda: method_2(list.copy(), k), number = 1)
+        print('Med ett k på', k, 'tog metod 2', round(method2time, 4), 'sekunder')
 
 
 if __name__ == '__main__':
