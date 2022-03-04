@@ -134,20 +134,19 @@ def main():
     sortlist = quicksort(list)
     list = addsonglength(file_del2, sortlist)
     print("Antal element =", antal_element)
-    print('börjar sortera')
-    quicksort(list)
-    print('sorterat klart')
 
+    sort_length = quicksort_length(list.copy())
+    quicksorttime = timeit.timeit(stmt=lambda: quicksort_length(list.copy()), number = 1)
     k = 4
-    while k <= 30:
+    while k <= 60:
         print('--')
         #Metod 1 - linjärsök och plocka bort den längsta
         method1time = timeit.timeit(stmt=lambda: method_1(list.copy(), k), number = 100)
         print('Med ett k på',k,'tog metod 1',round(method1time,4),'sekunder')
 
         #Metod 2 - Sortera och plocka ut den k längsta låten
-        method2time = timeit.timeit(stmt=lambda: method_2(list.copy(), k), number = 1)
-        print('Med ett k på', k, 'tog metod 2', round(method2time, 4), 'sekunder')
+        method2time = timeit.timeit(stmt=lambda: sort_length[k], number= 100)
+        print('Med ett k på', k, 'tog metod 2', round(quicksorttime+method2time, 4), 'sekunder')
         k += 4
 
 if __name__ == '__main__':
