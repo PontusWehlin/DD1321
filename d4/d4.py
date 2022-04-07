@@ -1,4 +1,5 @@
 import timeit, random, Quicksort, Quicksort_length
+import matplotlib.pyplot as plt
 
 
 class Song:
@@ -128,7 +129,7 @@ def main():
     filename = "unique_tracks.txt"
     file_del2 = "sang-artist-data.txt"
 
-    list, dictionary = readfile(filename, 100000)
+    list, dictionary = readfile(filename, 10000)
     antal_element = len(list)
 
     sortlist = quicksort(list)
@@ -138,22 +139,37 @@ def main():
     sort_length = quicksort_length(list.copy())
     quicksorttime = timeit.timeit(stmt=lambda: quicksort_length(list.copy()), number = 1)
     k = 4
+    k_values = []
+    lin_time = []
+    quick_time = []
     while k <= 60:
         print('--')
+        k_values.append(k)
         #Metod 1 - linjärsök och plocka bort den längsta
         method1time = timeit.timeit(stmt=lambda: method_1(list.copy(), k), number = 100)
+        print('Length of list ', len(list))
         print('Med ett k på',k,'tog metod 1',round(method1time,4),'sekunder')
+        lin_time.append(round(method1time,4))
 
         #Metod 2 - Sortera och plocka ut den k längsta låten
         method2time = timeit.timeit(stmt=lambda: sort_length[k], number= 100)
         print('Med ett k på', k, 'tog metod 2', round(quicksorttime+method2time, 4), 'sekunder')
+        quick_time.append(round(quicksorttime+method2time, 4))
+
         k += 4
+
+    plt.plot(k_values, lin_time, label = 'Linear search')
+    plt.plot(k_values, quick_time, label = 'Quicksort search')
+    plt.xlabel('k value')
+    plt.ylabel('time (s)')
+    plt.legend()
+    plt.show()
 
 if __name__ == '__main__':
     print('Välj en av följande')
     print('1. Tidtagning')
     print('2. Annat')
-    i = 2 #int(input('-> '))
+    i = int(input('-> '))
     if i == 1:
         timing()
     elif i == 2:
