@@ -1,5 +1,8 @@
-import timeit, random, Quicksort, Quicksort_length
+import timeit, random, Quicksort, Quicksort_length, sys
+import Quicksort_recursiv as Qr
+import Quicksort_recursiv_length as Qr_l
 import matplotlib.pyplot as plt
+sys.setrecursionlimit(10000)
 
 
 class Song:
@@ -60,11 +63,13 @@ def linesearch_length(list):
     return index
 
 def quicksort(list):
-    Quicksort.quickSortIterative(list, 0, len(list)-1)
+    #Quicksort.quickSortIterative(list, 0, len(list)-1)
+    Qr.quicksort(list)
     return list
 
 def quicksort_length(list):
-    Quicksort_length.quickSortIterative(list, 0, len(list)-1)
+    #Quicksort_length.quickSortIterative(list, 0, len(list)-1)
+    Qr_l.quicksort(list)
     return list
 
 def binarysearch(list, search):
@@ -137,7 +142,7 @@ def main():
     print("Antal element =", antal_element)
 
     sort_length = quicksort_length(list.copy())
-    quicksorttime = timeit.timeit(stmt=lambda: quicksort_length(list.copy()), number = 1)
+    quicksorttime = timeit.timeit(stmt=lambda: quicksort_length(list.copy()), number = 10)
     k = 4
     k_values = []
     lin_time = []
@@ -147,13 +152,15 @@ def main():
         k_values.append(k)
         #Metod 1 - linjärsök och plocka bort den längsta
         method1time = timeit.timeit(stmt=lambda: method_1(list.copy(), k), number = 100)
-        print('Length of list ', len(list))
         print('Med ett k på',k,'tog metod 1',round(method1time,4),'sekunder')
         lin_time.append(round(method1time,4))
 
         #Metod 2 - Sortera och plocka ut den k längsta låten
-        method2time = timeit.timeit(stmt=lambda: sort_length[k], number= 100)
+        method2time = timeit.timeit(stmt=lambda: sort_length[k], number= 10)
         print('Med ett k på', k, 'tog metod 2', round(quicksorttime+method2time, 4), 'sekunder')
+        #method2time = timeit.timeit(stmt=lambda: quicksort_length(list.copy())[k], number= 10)
+        #print('Med ett k på', k, 'tog metod 2', round(method2time, 4), 'sekunder')
+
         quick_time.append(round(quicksorttime+method2time, 4))
 
         k += 4

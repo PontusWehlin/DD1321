@@ -3,7 +3,7 @@
 def partition(array, begin, end):
     pivot = begin
     for i in range(begin+1, end+1):
-        if array[i] <= array[begin]:
+        if array[i].artist <= array[begin].artist:
             pivot += 1
             array[i], array[pivot] = array[pivot], array[i]
     array[pivot], array[begin] = array[begin], array[pivot]
