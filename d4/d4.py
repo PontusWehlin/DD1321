@@ -2,7 +2,8 @@ import timeit, random, Quicksort, Quicksort_length, sys
 import Quicksort_recursiv as Qr
 import Quicksort_recursiv_length as Qr_l
 import matplotlib.pyplot as plt
-sys.setrecursionlimit(10000)
+
+#sys.setrecursionlimit(10**9)
 
 
 class Song:
@@ -63,13 +64,13 @@ def linesearch_length(list):
     return index
 
 def quicksort(list):
-    #Quicksort.quickSortIterative(list, 0, len(list)-1)
-    Qr.quicksort(list)
+    Quicksort.quickSortIterative(list, 0, len(list)-1)
+    #Qr.quicksort(list)
     return list
 
 def quicksort_length(list):
-    #Quicksort_length.quickSortIterative(list, 0, len(list)-1)
-    Qr_l.quicksort(list)
+    Quicksort_length.quickSortIterative(list, 0, len(list)-1)
+    #Qr_l.quicksort(list)
     return list
 
 def binarysearch(list, search):
@@ -134,7 +135,7 @@ def main():
     filename = "unique_tracks.txt"
     file_del2 = "sang-artist-data.txt"
 
-    list, dictionary = readfile(filename, 10000)
+    list, dictionary = readfile(filename, 100000)
     antal_element = len(list)
 
     sortlist = quicksort(list)
@@ -170,6 +171,7 @@ def main():
     plt.xlabel('k value')
     plt.ylabel('time (s)')
     plt.legend()
+    plt.title('Number of songs: ' + len(list.copy()))
     plt.show()
 
 if __name__ == '__main__':
