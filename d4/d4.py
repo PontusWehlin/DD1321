@@ -3,7 +3,7 @@ import Quicksort_recursiv as Qr
 import Quicksort_recursiv_length as Qr_l
 import matplotlib.pyplot as plt
 
-#sys.setrecursionlimit(10**9)
+sys.setrecursionlimit(10**6)
 
 
 class Song:
@@ -135,7 +135,7 @@ def main():
     filename = "unique_tracks.txt"
     file_del2 = "sang-artist-data.txt"
 
-    list, dictionary = readfile(filename, 100000)
+    list, dictionary = readfile(filename, 1000000)
     antal_element = len(list)
 
     sortlist = quicksort(list)
@@ -143,7 +143,8 @@ def main():
     print("Antal element =", antal_element)
 
     sort_length = quicksort_length(list.copy())
-    quicksorttime = timeit.timeit(stmt=lambda: quicksort_length(list.copy()), number = 10)
+    print('Sorted')
+    quicksorttime = timeit.timeit(stmt=lambda: quicksort_length(list.copy()), number = 1)
     k = 4
     k_values = []
     lin_time = []
@@ -157,7 +158,7 @@ def main():
         lin_time.append(round(method1time,4))
 
         #Metod 2 - Sortera och plocka ut den k längsta låten
-        method2time = timeit.timeit(stmt=lambda: sort_length[k], number= 10)
+        method2time = timeit.timeit(stmt=lambda: sort_length[k], number= 100)
         print('Med ett k på', k, 'tog metod 2', round(quicksorttime+method2time, 4), 'sekunder')
         #method2time = timeit.timeit(stmt=lambda: quicksort_length(list.copy())[k], number= 10)
         #print('Med ett k på', k, 'tog metod 2', round(method2time, 4), 'sekunder')
@@ -171,7 +172,7 @@ def main():
     plt.xlabel('k value')
     plt.ylabel('time (s)')
     plt.legend()
-    plt.title('Number of songs: ' + len(list.copy()))
+    plt.title('Number of songs: ' + str(len(list.copy())))
     plt.show()
 
 if __name__ == '__main__':

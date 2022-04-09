@@ -37,6 +37,7 @@ def quickSortIterative(arr, l, h):
     counter = 0
     # Keep popping from stack while is not empty
     while top >= 0:
+        print(counter)
         counter += 1
         if type(counter/100) == int: print(counter)
         # Pop h and l
