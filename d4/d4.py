@@ -103,7 +103,7 @@ def method_2(list, k):
 def timing():
     filename = "unique_tracks.txt"
 
-    lista, dictionary = readfile(filename, 100000)
+    lista, dictionary = readfile(filename, 10**6)
     antal_element = len(lista)
     print("Antal element =", antal_element)
 
@@ -120,14 +120,10 @@ def timing():
     print('Linjärsökning för sorterad lista tog', round(linjsorttid, 4), 'sekunder')
 
     sorttid = timeit.timeit(stmt=lambda: quicksort(lista), number=1)
-    print("Quicksort tog", round(sorttid, 4), "sekunder")
+    print("Mergesort tog", round(sorttid, 4), "sekunder")
 
-    timevek = []
-    for i in range(1000):
-        time = timeit.timeit(stmt=lambda: linsearch_artist(lista, lista[random.randint(0, len(lista) - 1)].artist), number=100)
-        timevek.append(time)
-    randomtime = sum(timevek) / len(timevek)
-    print('Linjärsökning i den osorterade listan för 1000 slumpade element tog i genomsnitt', round(randomtime, 4),
+    time = timeit.timeit(stmt=lambda: linsearch_artist(lista, lista[random.randint(0, len(lista) - 1)].artist), number=1000)
+    print('Linjärsökning i den osorterade listan för 1000 slumpade element tog i genomsnitt', round(time/1000, 4),
           'sekunder')
 
     bintid = timeit.timeit(stmt=lambda: binarysearch(sort_list, sort_list[-10]), number=100)
@@ -140,7 +136,7 @@ def main():
     filename = "unique_tracks.txt"
     file_del2 = "sang-artist-data.txt"
 
-    list, dictionary = readfile(filename, 100000)
+    list, dictionary = readfile(filename, 10**6)
     antal_element = len(list)
 
     sortlist = quicksort(list)
@@ -148,32 +144,33 @@ def main():
     print("Antal element =", antal_element)
 
     sort_length = quicksort_length(list.copy())
-    print('Sorted')
-    quicksorttime = timeit.timeit(stmt=lambda: quicksort_length(list.copy()), number = 1)
-    k = 4
+    print('Sorterad')
+    quicksorttime = timeit.timeit(stmt=lambda: quicksort_length(list.copy()), number = 10)
+    print('Tid tagen för sortering:', round(quicksorttime/10,4), 'sekunder')
+    k = 3
     k_values = []
     lin_time = []
     quick_time = []
-    while k <= 60:
+    while k <= 30:
         print('--')
         k_values.append(k)
         #Metod 1 - linjärsök och plocka bort den längsta
-        method1time = timeit.timeit(stmt=lambda: method_1(list.copy(), k), number = 100)
-        print('Med ett k på',k,'tog metod 1',round(method1time,4),'sekunder')
-        lin_time.append(round(method1time,4))
+        method1time = timeit.timeit(stmt=lambda: method_1(list.copy(), k), number = 10)
+        print('Med ett k på',k,'tog metod 1',round((method1time/10),4),'sekunder')
+        lin_time.append(round(method1time/10,4))
 
         #Metod 2 - Sortera och plocka ut den k längsta låten
-        method2time = timeit.timeit(stmt=lambda: sort_length[k], number= 100)
-        print('Med ett k på', k, 'tog metod 2', round(quicksorttime+method2time, 4), 'sekunder')
+        method2time = timeit.timeit(stmt=lambda: sort_length[k], number= 10)
+        print('Med ett k på', k, 'tog metod 2', round((quicksorttime+method2time)/10, 4), 'sekunder')
         #method2time = timeit.timeit(stmt=lambda: quicksort_length(list.copy())[k], number= 10)
         #print('Med ett k på', k, 'tog metod 2', round(method2time, 4), 'sekunder')
 
-        quick_time.append(round(quicksorttime+method2time, 4))
+        quick_time.append(round((quicksorttime+method2time)/10, 4))
 
-        k += 4
+        k += 3
 
-    plt.plot(k_values, lin_time, label = 'Linear search')
-    plt.plot(k_values, quick_time, label = 'Quicksort search')
+    plt.plot(k_values, lin_time, label = 'Method 1')
+    plt.plot(k_values, quick_time, label = 'Method 2')
     plt.xlabel('k value')
     plt.ylabel('time (s)')
     plt.legend()

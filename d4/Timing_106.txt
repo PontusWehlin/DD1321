@@ -1,0 +1,7 @@
+Antal element = 1000000
+Linjärsökningen tog 0.0037 sekunder
+Linjärsökning för sorterad lista tog 28.0858 sekunder
+Mergesort tog 6.6963 sekunder
+Linjärsökning i den osorterade listan för 1000 slumpade element tog i genomsnitt 0.1394 sekunder
+Binärsökning tog 0.0005 sekunder
+Uppslagning i pythons dictionary tog 0.0 sekunder

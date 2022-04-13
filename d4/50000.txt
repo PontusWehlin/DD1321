@@ -1,7 +1,0 @@
-Antal element = 50000
-Linjärsökningen tog 0.0194 sekunder
-Linjärsökning för sorterad lista tog 1.0039 sekunder
-Quicksort tog 215.0712 sekunder
-Linjärsökning i den osorterade listan för 1000 slumpade element tog i genomsnitt 0.4613 sekunder
-Binärsökning tog 0.0289 sekunder
-Uppslagning i pythons dictionary tog 0.0 sekunder
