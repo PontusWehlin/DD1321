@@ -1,6 +1,8 @@
 import timeit, random, Quicksort, Quicksort_length, sys
 import Quicksort_recursiv as Qr
 import Quicksort_recursiv_length as Qr_l
+import Mergesort as Ms
+import Mergesort_length as Ms_l
 import matplotlib.pyplot as plt
 
 sys.setrecursionlimit(10**6)
@@ -35,6 +37,7 @@ def readfile(filename, amount):
         song = Song(lineparts[3].rstrip('\n'), lineparts[2], lineparts[0], lineparts[1])
         songlist.append(song)
         songdir[lineparts[2]] = song
+    raw_file.close()
     return(songlist, songdir)
 
 def addsonglength(filename, list):
@@ -64,13 +67,15 @@ def linesearch_length(list):
     return index
 
 def quicksort(list):
-    Quicksort.quickSortIterative(list, 0, len(list)-1)
+    #Quicksort.quickSortIterative(list, 0, len(list)-1)
     #Qr.quicksort(list)
+    Ms.mergeSort(list)
     return list
 
 def quicksort_length(list):
-    Quicksort_length.quickSortIterative(list, 0, len(list)-1)
+    #Quicksort_length.quickSortIterative(list, 0, len(list)-1)
     #Qr_l.quicksort(list)
+    Ms.mergeSort(list)
     return list
 
 def binarysearch(list, search):
@@ -135,7 +140,7 @@ def main():
     filename = "unique_tracks.txt"
     file_del2 = "sang-artist-data.txt"
 
-    list, dictionary = readfile(filename, 1000000)
+    list, dictionary = readfile(filename, 100000)
     antal_element = len(list)
 
     sortlist = quicksort(list)
