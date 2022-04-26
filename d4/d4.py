@@ -1,11 +1,7 @@
-import timeit, random, Quicksort, Quicksort_length, sys
-import Quicksort_recursiv as Qr
-import Quicksort_recursiv_length as Qr_l
+import timeit, random, sys
 import Mergesort as Ms
 import Mergesort_length as Ms_l
 import matplotlib.pyplot as plt
-
-sys.setrecursionlimit(10**6)
 
 
 class Song:
@@ -66,15 +62,11 @@ def linesearch_length(list):
             index = i
     return index
 
-def quicksort(list):
-    #Quicksort.quickSortIterative(list, 0, len(list)-1)
-    #Qr.quicksort(list)
+def mergesort(list):
     Ms.mergeSort(list)
     return list
 
-def quicksort_length(list):
-    #Quicksort_length.quickSortIterative(list, 0, len(list)-1)
-    #Qr_l.quicksort(list)
+def mergesort_length(list):
     Ms.mergeSort(list)
     return list
 
@@ -98,39 +90,67 @@ def method_1(list, k):
     index = linesearch_length(list)
 
 def method_2(list, k):
-    sort_length = quicksort_length(list)
+    sort_length = mergesort_length(list)
 
 def timing():
     filename = "unique_tracks.txt"
 
-    lista, dictionary = readfile(filename, 10**6)
-    antal_element = len(lista)
-    print("Antal element =", antal_element)
+    antal_element_list = []
+    linjtid_list = []
+    linjsorttid_list = []
+    sorttid_list = []
+    time_list = []
+    bintid_list = []
+    dicttid_list = []
 
-    sista = lista[len(lista) - 1]
-    testartist = sista.artist
+    for antallåtar in [10**2, 10**3, 10**4, 10**5, 10**6]:
+        lista, dictionary = readfile(filename, antallåtar)
+        antal_element = len(lista)
+        antal_element_list.append(antal_element)
+        print("Antal element =", antal_element)
 
-    linjtid = timeit.timeit(stmt=lambda: linsearch_artist(lista, testartist), number=100)
-    print("Linjärsökningen tog", round(linjtid, 4), "sekunder")
+        sista = lista[len(lista) - 1]
+        testartist = sista.artist
 
-    sort_list = quicksort(lista)
-    testartist = sort_list[-1].artist
+        linjtid = timeit.timeit(stmt=lambda: linsearch_artist(lista, testartist), number=100)
+        linjtid_list.append(linjtid)
+        print("Linjärsökningen tog", round(linjtid, 4), "sekunder")
 
-    linjsorttid = timeit.timeit(stmt=lambda: linsearch_artist(sort_list, testartist), number=100)
-    print('Linjärsökning för sorterad lista tog', round(linjsorttid, 4), 'sekunder')
+        sort_list = mergesort(lista)
+        testartist = sort_list[-1].artist
 
-    sorttid = timeit.timeit(stmt=lambda: quicksort(lista), number=1)
-    print("Mergesort tog", round(sorttid, 4), "sekunder")
+        linjsorttid = timeit.timeit(stmt=lambda: linsearch_artist(sort_list, testartist), number=100)
+        linjsorttid_list.append(linjsorttid)
+        print('Linjärsökning för sorterad lista tog', round(linjsorttid, 4), 'sekunder')
 
-    time = timeit.timeit(stmt=lambda: linsearch_artist(lista, lista[random.randint(0, len(lista) - 1)].artist), number=1000)
-    print('Linjärsökning i den osorterade listan för 1000 slumpade element tog i genomsnitt', round(time/1000, 4),
-          'sekunder')
+        sorttid = timeit.timeit(stmt=lambda: mergesort(lista), number=100)
+        sorttid_list.append(sorttid)
+        print("Mergesort tog", round(sorttid, 4), "sekunder")
 
-    bintid = timeit.timeit(stmt=lambda: binarysearch(sort_list, sort_list[-10]), number=100)
-    print('Binärsökning tog', round(bintid, 4), 'sekunder')
+        time = timeit.timeit(stmt=lambda: linsearch_artist(lista, lista[random.randint(0, len(lista) - 1)].artist), number=1000)
+        time_list.append(time)
+        print('Linjärsökning i den osorterade listan för 1000 slumpade element tog i genomsnitt', round(time, 4),
+              'sekunder')
 
-    dicttid = timeit.timeit(stmt=lambda: dictionary[testartist], number=100)
-    print('Uppslagning i pythons dictionary tog', round(dicttid, 4), 'sekunder')
+        bintid = timeit.timeit(stmt=lambda: binarysearch(sort_list, sort_list[-10]), number=100)
+        bintid_list.append(bintid)
+        print('Binärsökning tog', round(bintid, 4), 'sekunder')
+
+        dicttid = timeit.timeit(stmt=lambda: dictionary[testartist], number=100)
+        dicttid_list.append(dicttid)
+        print('Uppslagning i pythons dictionary tog', round(dicttid, 4), 'sekunder')
+
+    plt.plot(antal_element_list, linjtid_list, label= "Linjärsökning för osorterad lista")
+    plt.plot(antal_element_list, linjsorttid_list, label = "Linjärsökning för sorterad lista")
+    plt.plot(antal_element_list, sorttid_list, label = "Mergesort")
+    plt.plot(antal_element_list, time_list, label = "Linjärsökning efter 1000 slumpade element")
+    plt.plot(antal_element_list, bintid_list, label = "Binärsökning")
+    plt.plot(antal_element_list, dicttid_list, label = "Pythons inbyggda dictionary")
+    plt.xlabel('Antal låtar')
+    plt.ylabel('tid (s)')
+    plt.legend()
+    plt.title("Komplexitets undersökning")
+    plt.show()
 
 def main():
     filename = "unique_tracks.txt"
@@ -139,14 +159,14 @@ def main():
     list, dictionary = readfile(filename, 10**6)
     antal_element = len(list)
 
-    sortlist = quicksort(list)
+    sortlist = mergesort(list)
     list = addsonglength(file_del2, sortlist)
     print("Antal element =", antal_element)
 
-    sort_length = quicksort_length(list.copy())
+    sort_length = mergesort_length(list.copy())
     print('Sorterad')
-    quicksorttime = timeit.timeit(stmt=lambda: quicksort_length(list.copy()), number = 10)
-    print('Tid tagen för sortering:', round(quicksorttime/10,4), 'sekunder')
+    mergesorttime = timeit.timeit(stmt=lambda: mergesort_length(list.copy()), number = 10)
+    print('Tid tagen för sortering:', round(mergesorttime/10,4), 'sekunder')
     k = 3
     k_values = []
     lin_time = []
@@ -161,26 +181,26 @@ def main():
 
         #Metod 2 - Sortera och plocka ut den k längsta låten
         method2time = timeit.timeit(stmt=lambda: sort_length[k], number= 10)
-        print('Med ett k på', k, 'tog metod 2', round((quicksorttime+method2time)/10, 4), 'sekunder')
-        #method2time = timeit.timeit(stmt=lambda: quicksort_length(list.copy())[k], number= 10)
+        print('Med ett k på', k, 'tog metod 2', round((mergesorttime+method2time)/10, 4), 'sekunder')
+        #method2time = timeit.timeit(stmt=lambda: mergesort_length(list.copy())[k], number= 10)
         #print('Med ett k på', k, 'tog metod 2', round(method2time, 4), 'sekunder')
 
-        quick_time.append(round((quicksorttime+method2time)/10, 4))
+        quick_time.append(round((mergesorttime+method2time)/10, 4))
 
         k += 3
 
-    plt.plot(k_values, lin_time, label = 'Method 1')
-    plt.plot(k_values, quick_time, label = 'Method 2')
-    plt.xlabel('k value')
-    plt.ylabel('time (s)')
+    plt.plot(k_values, lin_time, label = 'Metod 1')
+    plt.plot(k_values, quick_time, label = 'Metod 2')
+    plt.xlabel('k värden')
+    plt.ylabel('tid (s)')
     plt.legend()
-    plt.title('Number of songs: ' + str(len(list.copy())))
+    plt.title('Antal låtar: ' + str(len(list.copy())))
     plt.show()
 
 if __name__ == '__main__':
     print('Välj en av följande')
-    print('1. Tidtagning')
-    print('2. Annat')
+    print('1. Tidtagning av olika algoritmer')
+    print('2. Jämförelse mellan linjärsökning och mergesort')
     i = int(input('-> '))
     if i == 1:
         timing()
